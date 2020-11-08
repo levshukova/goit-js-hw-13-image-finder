@@ -6,17 +6,24 @@ export default class ImageApiService {
     this.searchQuery = '';
     this.page = 1;
   }
-  fetchImages() {
+  async fetchImages() {
     const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`;
-
-    return fetch(url)
-      .then(response => response.json())
-      .then(({ hits }) => {
-        this.incrementPage();
-        return hits;
-      });
+    return this.getData(url).then(response => {
+      this.incrementPage();
+      return response.hits;
+    });
   }
-
+  async countCards() {
+    const url = `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this._page}&per_page=12&key=${API_KEY}`;
+    return this.getData(url).then(response => {
+      return response.totalHits;
+    });
+  }
+  async getData(url) {
+    const response = await fetch(url);
+    const images = await response.json();
+    return images;
+  }
   incrementPage() {
     this.page += 1;
   }
@@ -33,3 +40,10 @@ export default class ImageApiService {
     this.searchQuery = newQuery;
   }
 }
+
+// return fetch(url)
+//   .then(response => response.json())
+//   .then(({ hits }) => {
+//     this.incrementPage();
+//     return hits;
+//   });
