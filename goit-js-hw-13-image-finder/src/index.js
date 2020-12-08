@@ -59,7 +59,7 @@ function fetchImages() {
 
         if (imageApiService.page > 2) {
           window.scrollTo({
-            top: scrollHeight - 50,
+            top: scrollHeight,
             behavior: 'smooth',
           });
         }
